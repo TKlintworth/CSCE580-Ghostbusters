@@ -73,8 +73,19 @@ class DiscreteDistribution(dict):
         >>> empty.normalize()
         >>> empty
         {}
+        normalizes the values in the distribution to sum to one, but keeps the proportions of the values the same. Use the total method to 
+        find the sum of the values in the distribution. For an empty distribution or a distribution where 
+        all of the values are zero, do nothing. Note that this method modifies the distribution directly, rather than returning a new distribution.
         """
         "*** YOUR CODE HERE ***"
+        total = float(self.total())
+        #all = list(self.items())
+        if len(self.keys()) == 0:
+            return
+
+        for key in self.keys():
+            self[key] = self[key]/total
+
         raiseNotDefined()
 
     def sample(self):
@@ -99,6 +110,17 @@ class DiscreteDistribution(dict):
         0.0
         """
         "*** YOUR CODE HERE ***"
+        
+        total = float(self.total())
+        choice = random.choice(list(self))
+        weigthChoice = choice/total
+        return weigthChoice
+        
+        
+
+        #the probability that a key is sampled is proportional to its corresponding value 
+        #return the key, weight by the values associated with each key
+        
         raiseNotDefined()
 
 
@@ -169,6 +191,18 @@ class InferenceModule:
         Return the probability P(noisyDistance | pacmanPosition, ghostPosition).
         """
         "*** YOUR CODE HERE ***"
+        #takes in an observation (noisy reading of thre distance to the ghost)
+        #return the probability of the noisy distance reading given 
+        #pacmans position and the ghosts position
+        if ghostPosition == jailPosition:
+            if noisyDistance == None:
+                return 1
+            else:
+                return 0
+        if noisyDistance == None:
+            return 0
+        return busters.getObservationProbability(noisyDistance, manhattanDistance(pacmanPosition,ghostPosition))
+
         raiseNotDefined()
 
     def setGhostPosition(self, gameState, ghostPosition, index):
