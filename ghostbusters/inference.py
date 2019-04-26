@@ -114,8 +114,12 @@ class DiscreteDistribution(dict):
         for key in self.keys():
             for i in range(int(100*self[key])):
                 samples.append(key)
-        print(samples)
+        #print(samples)
         r = random.random()
+        return random.choice(samples)
+
+
+
         
         
 
@@ -315,20 +319,10 @@ class ExactInference(InferenceModule):
         current position. However, this is not a problem, as Pacman's current
         position is known.
         """
-        "*** YOUR CODE HERE ***"
-        allPos = self.allPositions()
-        pacmanPos = gameState.getPacmanPosition()
-        jailPos = self.getJailPosition()
-        self.getObservationProb()
-
-        for pos in allPos:
-            for belief in self.beliefs:
-                print("belief at pos ", pos, belief)
-        for belief in self.beliefs:
-            print(belief)
-
-        raiseNotDefined()
-
+        #observation is the noisy manhattan distance to the ghost being tracked
+        for pos in self.allPositions:
+            self.beliefs[pos] = self.beliefs[pos]*(self.getObservationProb(observation, gameState.getPacmanPosition(), pos, self.getJailPosition()))
+            
         self.beliefs.normalize()
 
     def elapseTime(self, gameState):
@@ -341,6 +335,20 @@ class ExactInference(InferenceModule):
         current position is known.
         """
         "*** YOUR CODE HERE ***"
+        pacmanPos = gameState.getPacmanPosition()
+        gameState.setGhostPosition()
+        newPosDist = self.getPositionDistribution(gameState, oldPos)
+        #in order to obtain the distribution over new positions for the ghost, given its previous position,:
+        #Return a distribution over successor positions of the ghost from the
+        #given gameState. You must first place the ghost in the gameState, using
+        #setGhostPosition below
+
+        newPosDist = []
+        for p in self.allPositions:
+            newPosDist[p] = self.getPositionDistribution(gameState, p)
+        #newPosDist = self.getPositionDistribution(gameState, oldPos)
+        #oldpos is the ghost position in the previous time step
+        
         raiseNotDefined()
 
     def getBeliefDistribution(self):
