@@ -136,6 +136,10 @@ class GreedyBustersAgent(BustersAgent):
         First computes the most likely position of each ghost that has
         not yet been captured, then chooses an action that brings
         Pacman closest to the closest ghost (according to mazeDistance!).
+
+        This question will use your observeUpdate and elapseTime implementations together
+        In the simple greedy strategy, 
+        Pacman assumes that each ghost is in its most likely position according to his beliefs, then moves toward the closest ghost
         """
         pacmanPosition = gameState.getPacmanPosition()
         legal = [a for a in gameState.getLegalPacmanActions()]
@@ -144,3 +148,30 @@ class GreedyBustersAgent(BustersAgent):
             [beliefs for i, beliefs in enumerate(self.ghostBeliefs)
              if livingGhosts[i+1]]
         "*** YOUR CODE HERE ***"
+        #print(livingGhostPositionDistributions)
+        print("Living Ghosts: ", livingGhosts)
+        #Your agent should first find the most likely position of each remaining uncaptured ghost
+        bestGhostPos = []
+        for dist in livingGhostPositionDistributions:
+            print(dist.argMax(), " :argmax")
+            bestGhostPos.append(dist.argMax())
+
+
+        #Now find which one of these ghosts is the closest
+        closestGhost = float('inf')
+        for action in legal:
+            for pos in bestGhostPos:
+                distance = self.distancer.getDistance(pacmanPosition, pos)
+                print("action, pos, distance: ", action, pos, self.distancer.getDistance(pacmanPosition, pos))
+                if distance < closestGhost:
+                    closestGhost = distance
+
+        print("closest ghost distance: ", closestGhost)
+                
+        #successorPosition = [Actions.getSuccessor(pacmanPosition, action)]
+        #for action in successorPosition:
+        #    print(action)
+
+        #for pos in bestGhostPos:
+        #    self.distancer.getDistance(pacmanPosition, )
+        #then choose an action that minimizes the maze distance to the closest ghost.
