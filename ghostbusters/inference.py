@@ -73,30 +73,19 @@ class DiscreteDistribution(dict):
         >>> empty.normalize()
         >>> empty
         {}
-        normalizes the values in the distribution to sum to one, but keeps the proportions of the values the same. Use the total method to 
-        find the sum of the values in the distribution. For an empty distribution or a distribution where 
-        all of the values are zero, do nothing. Note that this method modifies the distribution directly, rather than returning a new distribution.
         """
-        "*** YOUR CODE HERE ***"
-<<<<<<< HEAD
-        total = float(self.total())
+
+        total = self.total()
         #all = list(self.items())
         if len(self.keys()) == 0:
-            return
-
-        for key in self.keys():
-            self[key] = self[key]/total
-
-=======
-        
-        total = self.total()
+            return None
         if total == 0:
-            return 
-        for key in self.keys():
-            self[key] = self[key]/total        
-        
->>>>>>> d8527718398a9a698eca49052e25a7dc071df19e
-        raiseNotDefined()
+            return None
+        if self == None:
+            return None
+        else:
+            for key in self.keys():
+                self[key] = self[key]/total
 
     def sample(self):
         """
@@ -119,36 +108,20 @@ class DiscreteDistribution(dict):
         >>> round(samples.count('d') * 1.0/N, 1)
         0.0
         """
-        "*** YOUR CODE HERE ***"
-<<<<<<< HEAD
-        
-        total = float(self.total())
-        choice = random.choice(list(self))
-        weigthChoice = choice/total
-        return weigthChoice
+        #Normalize all values, add appropriate amount to a list, randomly choose value from list
+        self.normalize()
+        samples = []
+        for key in self.keys():
+            for i in range(int(100*self[key])):
+                samples.append(key)
+        print(samples)
+        r = random.random()
         
         
 
         #the probability that a key is sampled is proportional to its corresponding value 
         #return the key, weight by the values associated with each key
-=======
-        if self.total != 1:
-            self.normalize()
-        
-        items = self.items()
-        
-        distribution = [i[1] for i in items]
-        values = [i[0] for i in items]
-        
-        
-        r = random.random()
-        total = distribution[0]
-        i = 0
-        while r > total:
-            i += 1
-            total += distribution[i]
-        return values[i]
->>>>>>> d8527718398a9a698eca49052e25a7dc071df19e
+
         
         raiseNotDefined()
 
@@ -220,25 +193,13 @@ class InferenceModule:
         Return the probability P(noisyDistance | pacmanPosition, ghostPosition).
         """
         "*** YOUR CODE HERE ***"
-<<<<<<< HEAD
-        #takes in an observation (noisy reading of thre distance to the ghost)
-        #return the probability of the noisy distance reading given 
-        #pacmans position and the ghosts position
-=======
         trueDistance = manhattanDistance(pacmanPosition, ghostPosition)
         
->>>>>>> d8527718398a9a698eca49052e25a7dc071df19e
         if ghostPosition == jailPosition:
             if noisyDistance == None:
                 return 1
             else:
                 return 0
-<<<<<<< HEAD
-        if noisyDistance == None:
-            return 0
-        return busters.getObservationProbability(noisyDistance, manhattanDistance(pacmanPosition,ghostPosition))
-
-=======
         
         if noisyDistance == None:
             return 0
@@ -247,7 +208,6 @@ class InferenceModule:
         return busters.getObservationProbability(noisyDistance, trueDistance)
         
         
->>>>>>> d8527718398a9a698eca49052e25a7dc071df19e
         raiseNotDefined()
 
     def setGhostPosition(self, gameState, ghostPosition, index):
@@ -356,6 +316,17 @@ class ExactInference(InferenceModule):
         position is known.
         """
         "*** YOUR CODE HERE ***"
+        allPos = self.allPositions()
+        pacmanPos = gameState.getPacmanPosition()
+        jailPos = self.getJailPosition()
+        self.getObservationProb()
+
+        for pos in allPos:
+            for belief in self.beliefs:
+                print("belief at pos ", pos, belief)
+        for belief in self.beliefs:
+            print(belief)
+
         raiseNotDefined()
 
         self.beliefs.normalize()
