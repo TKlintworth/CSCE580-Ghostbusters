@@ -74,15 +74,18 @@ class DiscreteDistribution(dict):
         >>> empty
         {}
         """
-        "*** YOUR CODE HERE ***"
-        
+
         total = self.total()
+        #all = list(self.items())
+        if len(self.keys()) == 0:
+            return None
         if total == 0:
-            return 
-        for key in self.keys():
-            self[key] = self[key]/total        
-        
-        raiseNotDefined()
+            return None
+        if self == None:
+            return None
+        else:
+            for key in self.keys():
+                self[key] = self[key]/total
 
     def sample(self):
         """
@@ -105,23 +108,24 @@ class DiscreteDistribution(dict):
         >>> round(samples.count('d') * 1.0/N, 1)
         0.0
         """
-        "*** YOUR CODE HERE ***"
-        if self.total != 1:
-            self.normalize()
-        
-        items = self.items()
-        
-        distribution = [i[1] for i in items]
-        values = [i[0] for i in items]
-        
-        
+        #Normalize all values, add appropriate amount to a list, randomly choose value from list
+        self.normalize()
+        samples = []
+        for key in self.keys():
+            for i in range(int(100*self[key])):
+                samples.append(key)
+        #print(samples)
         r = random.random()
-        total = distribution[0]
-        i = 0
-        while r > total:
-            i += 1
-            total += distribution[i]
-        return values[i]
+        return random.choice(samples)
+
+
+
+        
+        
+
+        #the probability that a key is sampled is proportional to its corresponding value 
+        #return the key, weight by the values associated with each key
+
         
         raiseNotDefined()
 
@@ -315,9 +319,10 @@ class ExactInference(InferenceModule):
         current position. However, this is not a problem, as Pacman's current
         position is known.
         """
-        "*** YOUR CODE HERE ***"
-        raiseNotDefined()
-
+        #observation is the noisy manhattan distance to the ghost being tracked
+        for pos in self.allPositions:
+            self.beliefs[pos] = self.beliefs[pos]*(self.getObservationProb(observation, gameState.getPacmanPosition(), pos, self.getJailPosition()))
+            
         self.beliefs.normalize()
 
     def elapseTime(self, gameState):
@@ -330,6 +335,20 @@ class ExactInference(InferenceModule):
         current position is known.
         """
         "*** YOUR CODE HERE ***"
+        pacmanPos = gameState.getPacmanPosition()
+        gameState.setGhostPosition()
+        newPosDist = self.getPositionDistribution(gameState, oldPos)
+        #in order to obtain the distribution over new positions for the ghost, given its previous position,:
+        #Return a distribution over successor positions of the ghost from the
+        #given gameState. You must first place the ghost in the gameState, using
+        #setGhostPosition below
+
+        newPosDist = []
+        for p in self.allPositions:
+            newPosDist[p] = self.getPositionDistribution(gameState, p)
+        #newPosDist = self.getPositionDistribution(gameState, oldPos)
+        #oldpos is the ghost position in the previous time step
+        
         raiseNotDefined()
 
     def getBeliefDistribution(self):
