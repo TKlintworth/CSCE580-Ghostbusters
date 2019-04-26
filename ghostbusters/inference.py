@@ -334,22 +334,18 @@ class ExactInference(InferenceModule):
         Pacman's current position. However, this is not a problem, as Pacman's
         current position is known.
         """
-        "*** YOUR CODE HERE ***"
-        pacmanPos = gameState.getPacmanPosition()
-        gameState.setGhostPosition()
-        newPosDist = self.getPositionDistribution(gameState, oldPos)
-        #in order to obtain the distribution over new positions for the ghost, given its previous position,:
-        #Return a distribution over successor positions of the ghost from the
-        #given gameState. You must first place the ghost in the gameState, using
-        #setGhostPosition below
-
-        newPosDist = []
-        for p in self.allPositions:
-            newPosDist[p] = self.getPositionDistribution(gameState, p)
-        #newPosDist = self.getPositionDistribution(gameState, oldPos)
-        #oldpos is the ghost position in the previous time step
+        dist = DiscreteDistribution()
         
-        raiseNotDefined()
+        #update the belief at every position on the map after one time step elapsing
+        for oldPos in self.allPositions:
+            newPosDist = self.getPositionDistribution(gameState, oldPos)
+            for newPos in newPosDist:
+                #print()
+                #print("newPos, oldPos: ", newPos, oldPos)
+                #dist[oldPos] = newPos
+                dist[newPos] += self.beliefs[oldPos] * newPosDist[newPos]
+                
+        self.beliefs = dist
 
     def getBeliefDistribution(self):
         return self.beliefs
