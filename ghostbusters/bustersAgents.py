@@ -158,15 +158,29 @@ class GreedyBustersAgent(BustersAgent):
 
 
         #Now find which one of these ghosts is the closest
-        closestGhost = float('inf')
+        closestGhostDist = float('inf')
         for action in legal:
             for pos in bestGhostPos:
                 distance = self.distancer.getDistance(pacmanPosition, pos)
                 print("action, pos, distance: ", action, pos, self.distancer.getDistance(pacmanPosition, pos))
-                if distance < closestGhost:
-                    closestGhost = distance
+                if distance < closestGhostDist:
+                    closestGhostDist = distance
+                    ghostLoc = pos
 
-        print("closest ghost distance: ", closestGhost)
+
+        print("closest ghost distance: ", closestGhostDist)
+        print("closest ghost positon: ", ghostLoc)
+
+        bestAction = None
+        closestSuccessorDist = float('inf')
+        for action in legal:
+            successorPosition = Actions.getSuccessor(pacmanPosition, action)
+            newDistance = self.distancer.getDistance(successorPosition, ghostLoc)
+            print("action, distance(successor, ghostloc): ", action, newDistance)
+            if newDistance < closestSuccessorDist:
+                closestSuccessorDist = newDistance
+                bestAction = action
+        return bestAction
                 
         #successorPosition = [Actions.getSuccessor(pacmanPosition, action)]
         #for action in successorPosition:
