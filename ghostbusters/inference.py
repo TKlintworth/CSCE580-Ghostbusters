@@ -371,9 +371,16 @@ class ParticleFilter(InferenceModule):
         self.particles for the list of particles.
         """
         self.particles = []
-        "*** YOUR CODE HERE ***"
-        raiseNotDefined()
-
+        #A particle (sample) is a ghost position in this inference problem
+        i = 0
+        for pos in self.legalPositions:
+            print(pos)
+            if i < self.numParticles:
+                self.particles.append(pos)
+                i = i+1
+        for p in self.particles:
+            print(p)
+    
     def observeUpdate(self, observation, gameState):
         """
         Update beliefs based on the distance observation and Pacman's position.
@@ -406,7 +413,14 @@ class ParticleFilter(InferenceModule):
         This function should return a normalized distribution.
         """
         "*** YOUR CODE HERE ***"
-        raiseNotDefined()
+        dist = DiscreteDistribution()
+        for particle in self.particles:
+            dist[particle] = 1
+        print("dist ", dist)
+        dist.normalize()
+        print("normalized dist ", dist)
+        return dist
+        #return dist.normalize()
 
 
 class JointParticleFilter(ParticleFilter):
