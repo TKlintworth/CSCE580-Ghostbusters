@@ -149,11 +149,11 @@ class GreedyBustersAgent(BustersAgent):
              if livingGhosts[i+1]]
         "*** YOUR CODE HERE ***"
         #print(livingGhostPositionDistributions)
-        print("Living Ghosts: ", livingGhosts)
+        #print("Living Ghosts: ", livingGhosts)
         #Your agent should first find the most likely position of each remaining uncaptured ghost
         bestGhostPos = []
         for dist in livingGhostPositionDistributions:
-            print(dist.argMax(), " :argmax")
+            #print(dist.argMax(), " :argmax")
             bestGhostPos.append(dist.argMax())
 
 
@@ -162,21 +162,21 @@ class GreedyBustersAgent(BustersAgent):
         for action in legal:
             for pos in bestGhostPos:
                 distance = self.distancer.getDistance(pacmanPosition, pos)
-                print("action, pos, distance: ", action, pos, self.distancer.getDistance(pacmanPosition, pos))
+                #print("action, pos, distance: ", action, pos, self.distancer.getDistance(pacmanPosition, pos))
                 if distance < closestGhostDist:
                     closestGhostDist = distance
                     ghostLoc = pos
 
 
-        print("closest ghost distance: ", closestGhostDist)
-        print("closest ghost positon: ", ghostLoc)
+        #print("closest ghost distance: ", closestGhostDist)
+        #print("closest ghost positon: ", ghostLoc)
 
         bestAction = None
         closestSuccessorDist = float('inf')
         for action in legal:
             successorPosition = Actions.getSuccessor(pacmanPosition, action)
             newDistance = self.distancer.getDistance(successorPosition, ghostLoc)
-            print("action, distance(successor, ghostloc): ", action, newDistance)
+            #print("action, distance(successor, ghostloc): ", action, newDistance)
             if newDistance < closestSuccessorDist:
                 closestSuccessorDist = newDistance
                 bestAction = action
